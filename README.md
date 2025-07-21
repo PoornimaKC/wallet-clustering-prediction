@@ -29,34 +29,53 @@ The dataset was provided in CSV format with anonymized crypto wallet transaction
 - Determined optimal `k` using Elbow Method and Silhouette Score → **k=3**
 - Trained final model on full dataset and saved using joblib (`kmeans_model.pkl`)
 
-## 🚀 Web App Deployment
-Built a Streamlit web app that takes the following inputs:
-- Wallet balance
-- Total transactions
-- Avg. transaction amount
-- Counts of deposits, borrows, repayments, redeems, liquidations
-- Active days
+## 🧩 Workflow
+1. **Data ingestion**: Load and parse `user_wallet_transactions.json`.  
+2. **Feature engineering**: Aggregate into wallet-level metrics (transaction counts, deposit/borrow behavior, durations, etc.).  
+3. **Rule‑based scoring**: Optional step to derive numeric scores from features.  
+4. **Model‑based segmentation**: StandardScaling + K‑Means clustering to assign risk groups.  
+5. **API & UI**:
+   - FastAPI serves model endpoint `/predict_cluster`.
+   - Streamlit app provides user GUI for predictions.
+6. **Testing**: `load_model_test.py` confirms model loading and prediction.  
+7. **Reporting**: `analysis.md` segment interpretations.
 
 It predicts and displays the **wallet cluster label (0/1/2)**.
 
-## 📂 Project Structure
-📁 wallet_clustering
-├── 📄 analysis.md
-├── 📄 README.md
-├── 📄 app.py
-├── 📄 kmeans_model.pkl
-├── 📄 scaler.pkl
-├── 📄 processed_data.csv
-├── 📄 clustering_output.csv
-├── 📊 images/ (EDA plots, Elbow curve, etc.)
-├── 📄 tracker_table.xlsx
+## 🗂 Files Included
+- `wallet_level_dataset.csv`: Wallet features  
+- `kmeans_model.pkl`, `scaler.pkl`, `features.pkl`: Trained models  
+- `clustered_wallets.csv`: Final scored & labeled wallets  
+- `main.py`: FastAPI backend  
+- `streamlit_app.py`: Streamlit frontend  
+- `load_model_test.py`: Model-connectivity test  
+- `README.md`, `analysis.md`: Documentation
+
+ ## 🚀 Run Instructions
+### Setup  
+```bash
+conda env create --file environment.yml  
+conda activate fastapi_project
+
+### Run API
+```bash
+cd fastapi_project
+uvicorn main:app --reload
+
+### Run Streamlit UI (in separate terminal)
+```bash
+streamlit run streamlit_app.py
+
+### Test API from notebook or terminal
+```bash
+python load_model_test.py
 
 ## 🛠 Technologies Used
 - Python (Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn)
 - Streamlit
 - Joblib (model serialization)
 
-## 👤 Author
+Regards,
 Poornima KC  
 LinkedIn: https://www.linkedin.com/in/poornimakc/ | GitHub: https://github.com/PoornimaKC
 
