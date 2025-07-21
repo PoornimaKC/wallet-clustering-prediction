@@ -1,50 +1,45 @@
 # Wallet Clustering - Analysis Report
 
-## 📌 Objective
+## Objective
 To group crypto wallets into behavioral clusters using KMeans clustering on features derived from their transaction patterns and balances.
 
 ---
 
-## 🔎 Dataset Summary
-The dataset contains transactional records of wallets, including:
-- `BALANCE`, `TX_COUNT`, `TOTAL_TX_AMOUNT`, `DEPOSIT_COUNT`, etc.
+## Feature Summary
+Wallet-level metrics crafted include:
+- Transaction counts and volumes (total, avg)
+- Counts per action type (deposits, borrows, repays…)
+- Active behavior (days active, gaps between)
+  
+These encapsulate financial engagement and DeFi protocol diversity.
 
 ---
 
-## 📊 EDA Summary
-- Missing values: None
-- Most wallets are moderately active with low liquidation/redeem counts
+## Scoring & Clustering
+- A preliminary numeric credit score (0–1000) assigned via rule-based weighting.
+- K‑Means clustering (k=3) on behavioral features revealed:
+  - **Cluster 0 (“Medium Risk”)**: Mid-level transactions and activity  
+  - **Cluster 1 (“High Risk”)**: Large volumes but fewer interactions/activities  
+  - **Cluster 2 (“Low Risk”)**: Frequent, varied activity — higher engagement and reliability
+ 
+---
+
+## Score Distributions
+- Majority fall in **Medium Risk** cluster (~60–70%)
+- Smaller proportions in **Low** and **High Risk**
+- Pattern: wallets with higher active days and transaction diversity cluster into **Low Risk**
 
 ---
 
-## 💡 Feature Engineering
-- `AVG_TX_AMOUNT = TOTAL_TX_AMOUNT / TX_COUNT`
-- Dropped identifiers like `WALLET_ID`
-- Scaled features using MinMaxScaler
+## Interpretation & Insights
+- **Low Risk** wallets: exhibit consistent interaction, diversified DeFi usage, longevity
+- **High Risk** wallets: high volumes but less frequent engagement — could be whales or bots
+- **Medium Risk**: average usage — typical retail or mixed users
 
 ---
 
-## 🔁 Model Details
-- Chose **KMeans Clustering** as unsupervised learning algorithm
-- Found `k=3` optimal from Elbow Curve and Silhouette score
-- Model was trained on the cleaned, scaled dataset
-
----
-
-## 📈 Cluster Insights
-- **Cluster 0**: High balance, high transactions – possibly whales or high-volume users
-- **Cluster 1**: Moderate users with regular deposits and repayments
-- **Cluster 2**: Low activity, fewer transactions – possibly inactive or dormant wallets
-
----
-
-## 🔮 Streamlit Prediction App
-- Accepts user input (wallet metrics)
-- Predicts the cluster using the saved model and scaler
-- Output: Cluster 0 / 1 / 2
-
----
-
-## ✅ Conclusion
-The wallet clustering model successfully groups wallets into actionable segments. This can aid targeted marketing, fraud detection, and personalized DeFi service offerings.
+## Next Steps
+- Tune clusters (e.g. k=4 or other features like asset diversity, session behavior)
+- Compare to supervised scores if labeled data becomes available
+- Deploy as microservice in cloud environment
 
