@@ -1,0 +1,29 @@
+# 👇 Sample starter if you haven't written training code yet
+import pandas as pd
+from sklearn.cluster import KMeans
+import joblib
+
+# Load your data (replace with actual path if needed)
+df = pd.read_csv('clustered_wallets.csv')  # or your processed CSV
+
+# 🧠 Select features
+features = [
+    'num_transactions', 'total_amount', 'avg_transaction_amount',
+    'num_deposits', 'num_borrows', 'num_repayments',
+    'num_redeems', 'num_liquidations', 'active_days', 'days_between_tx'
+]
+X = df[features]
+
+# 🏗️ Fit model
+model = KMeans(n_clusters=3, random_state=42)
+model.fit(X)
+
+# ✅ Save the model
+joblib.dump(model, 'kmeans_model.pkl')
+
+# ✅ Save predictions
+df['Predicted_Cluster'] = model.predict(X)
+df.to_csv('predictions_output.csv', index=False)
+
+print("✅ Model saved as 'kmeans_model.pkl'")
+print("✅ Predictions saved as 'predictions_output.csv'")
